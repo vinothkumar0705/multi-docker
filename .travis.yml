@@ -14,7 +14,21 @@ after_success:
     - docker build -t vinothkumar1selvaraj/multi-docker-server ./server
     - docker build -t vinothkumar1selvaraj/multi-docker-worker ./worker
     - echo "DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+    
     - docker push vinothkumar1selvaraj/multi-docker-client
     - docker push vinothkumar1selvaraj/multi-docker-nginx
     - docker push vinothkumar1selvaraj/multi-docker-server
     - docker push vinothkumar1selvaraj/multi-docker-worker
+
+deploy:
+    edge: true
+    provide: elasticbeanstalk
+    region: ap-south-1
+    app: multi-docker
+    env: MultiDocker-env
+    bucket_name: elasticbeanstalk-ap-south-1-943722292289
+    bucket_path: "docker-multi"
+    on:
+        branch: master
+    access_key_id: $AWS_ACCESS_KEY
+    secret_access_key: "$AWS_SECRET_KEY"
